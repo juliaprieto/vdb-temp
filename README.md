@@ -63,11 +63,11 @@ La fonction `leaflet()`peut aussi prendre en entrée des données avec `leaflet(
 #### Passage à Lifemap (tuiles + données dans Solr)
 Les tuiles de Lifemap ont pour url http://lifemap-ncbi.univ-lyon1.fr/osm_tiles/{z}/{x}/{y}.png. 
 
-Les données additionnelles de Lifemap sont stockées dans deux 'coeurs' [Solr](https://lucene.apache.org/solr/). On y trouve les coordonnées de toutes les espèces et de tous les clades (un clade = un groupe monophylétique), ainsi que les noms latins, les synonymes, le nombre de descendants, leurs ascendants, etc. Aller voir directement sur http://lifemap-ncbi.univ-lyon1.fr:8983/solr/#/ pour mieux comprendre. 
+Les données additionnelles de Lifemap sont stockées dans deux 'coeurs' [Solr](https://lucene.apache.org/solr/). On y trouve les coordonnées de toutes les espèces et de tous les clades (un clade = un groupe monophylétique), ainsi que les noms latins, les synonymes, le nombre de descendants, leurs ascendants, etc. Aller voir directement sur http://lifemap-ncbi.univ-lyon1.fr:8080/solr/#/ pour mieux comprendre. 
 
 Au NCBI, et donc dans Lifemap, les espèces et les clades sont identifiés par un identifiant unique appelé **taxid**. 
 
-Une requête des taxid 2, 9443 et 2087 sur le "coeur" `taxo` (qui contient les données taxonomiques) se fait par l'url : http://lifemap-ncbi.univ-lyon1.fr:8983/solr/taxo/select?q=taxid:(2%209443%202087)&wt=json&rows=1000. Notons que le `%20` remplace l'espace.
+Une requête des taxid 2, 9443 et 2087 sur le "coeur" `taxo` (qui contient les données taxonomiques) se fait par l'url : http://lifemap-ncbi.univ-lyon1.fr:8080/solr/taxo/select?q=taxid:(2%209443%202087)&wt=json&rows=1000. Notons que le `%20` remplace l'espace.
 
 > **Exo 4**
 > - Visualiser Lifemap en lieu et place de la carte osm précédente et modifier la fonction qui crée une nouvelle carte vierge en conséquence.
