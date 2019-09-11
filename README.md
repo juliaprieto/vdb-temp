@@ -76,6 +76,36 @@ Une requête des taxid 2, 9443 et 2087 sur le "coeur" `taxo` (qui contient les d
 > - Jouer avec l'opacité, la présence de bordure, la couleur, la taille, etc. Taper `?addCircleMarker()` dans R pour avoir de l'aide.
 > - [rigolo] : n'importe quelle image peut servir d'icône de marqueur. On peut par exemple mettre une [silhouette de cheval](https://svgsilh.com/png-512/156496-cddc39.png) à *Equus caballus* (taxid : 9796). Essayez si vous avez le temps (explication détaillée [ici](https://rstudio.github.io/leaflet/markers.html)).
 
+```r
+require(jsonlite)
+GetCooFromTaxID<-function(taxids) {
+  ##taxids is an array that contains taxids.
+  ## url cannot be too long, so that we need to cut the taxids (100 max in one chunk)
+  ## and make as many requests as necessary.
+  taxids<-as.character(taxids) #change to characters.
+  DATA<-NULL
+  i<-1
+  while(i<=length(taxids)) {
+    cat(".")
+    taxids_sub<-taxids[i:(i+99)]
+    taxids_sub<-taxids_sub[!is.na(taxids_sub)]
+    taxids_sub<-paste(taxids_sub, collapse="%20") #accepted space separator in url
+    url<-paste("http://lifemap-ncbi.univ-lyon1.fr:8080/solr/taxo/select?q=taxid:(",taxids_sub,")&wt=json&rows=1000",sep="", collapse="")
+    #do the request :
+    data_sub<-fromJSON(url)
+    DATA<-rbind(DATA,data_sub$response$docs[,c("taxid","lon","lat", "sci_name","zoom","nbdesc")])
+    i<-i+100
+  } 
+  for (j in 1:ncol(DATA)) DATA[,j]<-unlist(DATA[,j])
+  class(DATA$taxid)<-"character"
+  return(DATA)
+}
+
+##test de la fonction
+data<-GetCooFromTaxID(c(2,9443,2087))
+
+```
+
 ### 3. Visualiser des données génomiques sur Lifemap
 Le but est de récupérer des données génomiques que nous pouvons associer aux espèces de l'arbre de la vie et visualiser sur Lifemap. 
 Nous nous intéressons ici :
